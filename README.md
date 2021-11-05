@@ -33,60 +33,23 @@ pool.data <-NULL;
 pool.data <- Read10X(data.dir ="pool01/outs/filtered_gene_bc_matrices/GRCh38/")
 pool<-NULL;
 pool<- CreateSeuratObject(counts = pool.data, project = "SC", min.cells = 5)
-SAMBCPAG008_V1<-read.table("SAMPLE_BARCODES_2020/PAG008_V1_BC.txt",header=FALSE)
-pool.vectorPAG008_V1<-SAMBCPAG008_V1[,"V1"]
-SAM_poolPAG008_V1<-subset(pool,cell=pool.vectorPAG008_V1)
-SAM_poolPAG008_V1$Visit <- "Noninfected"
-SAM_poolPAG008_V1$SAMP <- "PAG008"
-SAM_poolPAG008_V1$PAGID <- "PAG008_V1"
-SAM_poolPAG008_V1$Ethnic <- "Gouin"
-SAM_poolPAG008_V1$Batch <- "GB1"
+SAMBCPAG008_V1<-read.table("PAG00_V1_BC.txt",header=FALSE)
+pool.vectorPAG00_V1<-SAMBCPAG008_V1[,"V1"]
+SAM_poolPAG00_V1<-subset(pool,cell=pool.vectorPAG00_V1)
+SAM_poolPAG00_V1$Visit <- "Noninfected"
+SAM_poolPAG00_V1$SAMP <- "PAG00"
+SAM_poolPAG00_V1$PAGID <- "PAG00_V1"
+SAM_poolPAG00_V1$Ethnic <- "Gouin"
+SAM_poolPAG00_V1$Batch <- "GB1"
 saveRDS (SAM_poolPAG008_V1, file="PAG008_V1.Rds")
 
 
-CombinedPoolPool1 <- merge(SAM_poolPAG008_V1,y=c(SAM_poolPAG014_V1,SAM_poolPAG044_V1,SAM_poolPAG053_V1),add.cell.ids=c("GB1-Pool1-PAG008_V1","GB1-Pool1-PAG014_V1" ,"GB1-Pool1-PAG044_V1" ,"GB1-Pool1-PAG053_V1"))
-saveRDS (CombinedPoolPool1, file="CombinedPoolPool1.Rds")
+CombinedPoolPool1 <- merge(SAM_poolPAG00_V1,y=c(SAM_poolSAM2_V1,SAM_poolSAM3_V1,SAM_poolPSAM4_V1),add.cell.ids=c("GB1-Pool1-SAM1_V1","GB1-Pool1-SAM2_V1" ,"GB1-Pool1-PAGSAM3_V1" ,"GB1-Pool1-PAGSAM4_V1"))
 
 ```
 
 **Step (c) : Combine all pools and run seurat**
 ```{r}
-reference <- LoadH5Seurat("pbmc_multimodal.h5seurat")
-
-Pool1.1 <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool1.Rds")
-Pool10.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool10.Rds")
-Pool11.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool11.Rds")
-Pool12.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool12.Rds")
-Pool13.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool13.Rds")
-Pool14.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool14.Rds")
-Pool15.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool15.Rds")
-Pool16.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool16.Rds")
-Pool2.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool2.Rds")
-Pool3.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool3.Rds")
-Pool4.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool4.Rds")
-Pool5.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool5.Rds")
-Pool6.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool6.Rds")
-Pool7.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool7.Rds")
-Pool8.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool8.Rds")
-Pool9.1  <- readRDS("STEP1_CREATE_COMBINEDPOOLS/CombinedPoolPool9.Rds")
-
-Pool1.1 @meta.data[,"PoolID"] <- "Pool1"
-Pool10.1 @meta.data[,"PoolID"] <- "Pool10"
-Pool11.1 @meta.data[,"PoolID"] <- "Pool11"
-Pool12.1 @meta.data[,"PoolID"] <- "Pool12"
-Pool13.1 @meta.data[,"PoolID"] <- "Pool13"
-Pool14.1 @meta.data[,"PoolID"] <- "Pool14"
-Pool15.1 @meta.data[,"PoolID"] <-  "Pool15"
-Pool16.1 @meta.data[,"PoolID"] <- "Pool16"
-Pool2.1 @meta.data[,"PoolID"] <- "Pool2"
-Pool3.1 @meta.data[,"PoolID"] <- "Pool3"
-Pool4.1 @meta.data[,"PoolID"] <- "Pool4"
-Pool5.1 @meta.data[,"PoolID"] <- "Pool5"
-Pool6.1 @meta.data[,"PoolID"] <- "Pool6"
-Pool7.1 @meta.data[,"PoolID"] <- "Pool7"
-Pool8.1 @meta.data[,"PoolID"] <-  "Pool8"
-Pool9.1 @meta.data[,"PoolID"] <- "Pool9"
-
 pag.combined<- merge(Pool1.1, y=c(Pool2.1,Pool3.1,Pool4.1,Pool5.1,Pool6.1,Pool7.1,Pool8.1,Pool9.1,Pool10.1,Pool11.1,Pool12.1,Pool13.1,Pool14.1,Pool15.1,Pool16.1), project = "AllSamplesCombined")
 
 ```
@@ -107,6 +70,7 @@ pag.combined_batches <- lapply(X = pag.combined_batches, FUN = SCTransform, verb
 
 **Step (a) : Multimodal Reference mapping PBMC**
 ```{r}
+reference <- LoadH5Seurat("pbmc_multimodal.h5seurat")
 anchors <- list()
 for (i in 1:length(pag.combined_batches)) {
   anchors[[i]] <- FindTransferAnchors(
