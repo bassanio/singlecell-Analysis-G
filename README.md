@@ -1,7 +1,7 @@
 # singlecell-analysis-G
 Singlecell Analysis
 
-[Step 1: Demultiplexing of Samples](#Step-1:Identification-of-singlecells-based-on-the-genotype)
+[Step 1: Demultiplexing of Samples](#Step-1-Identification-of-singlecells-based-on-the-genotype)
 
 [Step 2: QC and Filtering the data](#QC-and-filtering-data)
 
@@ -12,7 +12,7 @@ Singlecell Analysis
 [Step 5: scRNA eQTL](#sceQTL)
 
 
-# Step 1:Identification of singlecells based on the genotype
+# Step 1 Identification of singlecells based on the genotype
 
 **Step (a): Demuxlet** 
 ```
