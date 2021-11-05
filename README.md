@@ -158,14 +158,16 @@ plink --all-pheno --linear dominant interaction  --bfile AnalysisSamples  --no-s
 # Software requirments
 1: R version 4.0.3
 
-2: Seurat_4.0.0
+2: Seurat : 4.0.0
 
-3: sctransform_0.3.2
+3: sctransform : 0.3.2
 
-4: SeuratObject_4.0.0
+4: SeuratObject : 4.0.0
 
-5: SeuratDisk_0.0.0.9019
+5: SeuratDisk : 0.0.0.9019
 
-6: plink_beta5.3
+6: plink : beta5.3
 
 7: [Demuxlet](https://github.com/statgen/demuxlet)
+
+8: VCFtools : 0.1.14
