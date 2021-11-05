@@ -12,7 +12,7 @@ Singlecell Analysis
 [Step 5: scRNA eQTL](#Identification-of-singlecells-based-on-the-genotype)
 
 
-#Identification-of-singlecells-based-on-the-genotype
+# Identification of singlecells based on the genotype
 
 **Step 1: Demuxlet** 
 ```
