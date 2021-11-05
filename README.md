@@ -150,8 +150,6 @@ Data.filtered <- subset(Merged_Combined_Batch, subset = predicted.celltype.l1.sc
 
 **Step: Linear Dominant Model**
 
-*Software :plink_beta5.3*
-
 ```
 plink --all-pheno --linear dominant interaction  --bfile AnalysisSamples  --no-sex  --pheno $i --covar Covariate_Filtered.txt --out INT  --parameters 1-3 --vif 9999
 ```
@@ -159,7 +157,14 @@ plink --all-pheno --linear dominant interaction  --bfile AnalysisSamples  --no-s
 
 # Software requirments
 1: R version 4.0.3
+
 2: Seurat_4.0.0
+
 3: sctransform_0.3.2
-4: SeuratObject_4.0.0   
-5: SeuratDisk_0.0.0.9019 
+
+4: SeuratObject_4.0.0
+
+5: SeuratDisk_0.0.0.9019
+
+6: plink_beta5.3
+
