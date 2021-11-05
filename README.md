@@ -11,6 +11,8 @@ Singlecell Analysis
 
 [Step 5: scRNA eQTL](#sceQTL)
 
+[Software Requirments](#Software-requirments)
+
 
 # Identification of singlecells based on the genotype
 
@@ -153,3 +155,11 @@ Data.filtered <- subset(Merged_Combined_Batch, subset = predicted.celltype.l1.sc
 ```
 plink --all-pheno --linear dominant interaction  --bfile AnalysisSamples  --no-sex  --pheno $i --covar Covariate_Filtered.txt --out INT  --parameters 1-3 --vif 9999
 ```
+
+
+# Software requirments
+1: R version 4.0.3
+2: Seurat_4.0.0
+3: sctransform_0.3.2
+4: SeuratObject_4.0.0   
+5: SeuratDisk_0.0.0.9019 
