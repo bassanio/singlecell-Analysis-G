@@ -18,9 +18,9 @@ Singlecell Analysis
 
 **Step (a): Demuxlet** 
 ```
-demuxlet --sam Pool002_cellrangerCount/outs/possorted_genome_bam.bam \
+demuxlet --sam pool001/outs/possorted_genome_bam.bam \
 --vcf Filtered_2.Sorted.vcf.gz  --field GT \
---group-list Pool002_cellrangerCount/outs/filtered_feature_bc_matrix/barcodes.tsv.gz \
+--group-list pool001/outs/filtered_feature_bc_matrix/barcodes.tsv.gz \
 --min-callrate 0.30 \
 --out Pool2-GT
 
@@ -30,7 +30,7 @@ demuxlet --sam Pool002_cellrangerCount/outs/possorted_genome_bam.bam \
 
 ```{r}
 pool.data <-NULL;
-pool.data <- Read10X(data.dir ="190321_A00534_0029_AHF5JGDSXX/pool01/outs/filtered_gene_bc_matrices/GRCh38/")
+pool.data <- Read10X(data.dir ="pool01/outs/filtered_gene_bc_matrices/GRCh38/")
 pool<-NULL;
 pool<- CreateSeuratObject(counts = pool.data, project = "SC", min.cells = 5)
 SAMBCPAG008_V1<-read.table("SAMPLE_BARCODES_2020/PAG008_V1_BC.txt",header=FALSE)
@@ -168,3 +168,4 @@ plink --all-pheno --linear dominant interaction  --bfile AnalysisSamples  --no-s
 
 6: plink_beta5.3
 
+7: [Demuxlet](https://github.com/statgen/demuxlet)
