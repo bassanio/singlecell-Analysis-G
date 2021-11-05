@@ -135,3 +135,5 @@ plink --all-pheno --linear dominant interaction  --bfile AnalysisSamples  --no-s
 7: [Demuxlet](https://github.com/statgen/demuxlet)
 
 8: VCFtools : 0.1.14
+
+9: cellranger : 2.2.0
