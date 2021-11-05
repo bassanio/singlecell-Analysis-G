@@ -1,20 +1,20 @@
 # singlecell-analysis-G
 Singlecell Analysis
 
-[Step 1: Demultiplexing of Samples](#Identification-of-singlecells-based-on-the-genotype)
+[Step 1: Demultiplexing of Samples](#Step-1:-Identification-of-singlecells-based-on-the-genotype)
 
-[Step 2: Qcing and Filtering the data](#Identification-of-singlecells-based-on-the-genotype)
+[Step 2: QC and Filtering the data](#QC-and-filtering-data)
 
-[Step 3: Normalization of the cell data](#Identification-of-singlecells-based-on-the-genotype)
+[Step 3: Normalization of the cell data](#Data-normalization-of-data-by-samples)
 
-[Step 4: Cell type identification](#Identification-of-singlecells-based-on-the-genotype)
+[Step 4: Cell type identification](#Cell-type-identification)
 
-[Step 5: scRNA eQTL](#Identification-of-singlecells-based-on-the-genotype)
+[Step 5: scRNA eQTL](#sceQTL)
 
 
-# Identification of singlecells based on the genotype
+# Step 1: Identification of singlecells based on the genotype
 
-**Step 1: Demuxlet** 
+**Step (a): Demuxlet** 
 ```
 demuxlet --sam Pool002_cellrangerCount/outs/possorted_genome_bam.bam \
 --vcf Filtered_2.Sorted.vcf.gz  --field GT \
@@ -24,7 +24,7 @@ demuxlet --sam Pool002_cellrangerCount/outs/possorted_genome_bam.bam \
 
 ```
 
-**Step 2: Subsetting** singlecells per sample and creating pool wise subset
+**Step (b): Subsetting** singlecells per sample and creating pool wise subset
 
 ```{r}
 pool.data <-NULL;
@@ -47,7 +47,7 @@ saveRDS (CombinedPoolPool1, file="CombinedPoolPool1.Rds")
 
 ```
 
-**Step 3 : Combine all pools and run seurat**
+**Step (c) : Combine all pools and run seurat**
 ```{r}
 reference <- LoadH5Seurat("pbmc_multimodal.h5seurat")
 
@@ -88,13 +88,12 @@ Pool9.1 @meta.data[,"PoolID"] <- "Pool9"
 pag.combined<- merge(Pool1.1, y=c(Pool2.1,Pool3.1,Pool4.1,Pool5.1,Pool6.1,Pool7.1,Pool8.1,Pool9.1,Pool10.1,Pool11.1,Pool12.1,Pool13.1,Pool14.1,Pool15.1,Pool16.1), project = "AllSamplesCombined")
 
 ```
-
-**Step 4 : QCing the data**
+# QC and filtering data 
 ```{r}
 pag.combined<- subset(pag.combined, subset = nFeature_RNA > 200 & nFeature_RNA < 5200 & percent.mt < 10)
 ````
 
-**Step 5 : Data normalization of Data by samples**
+# Data normalization of data by samples
 
 ```{r}
 pag.combined_batches <- SplitObject(pag.combined, split.by = "PAGID")
@@ -102,7 +101,9 @@ pag.combined_batches <- lapply(X = pag.combined_batches, FUN = SCTransform, verb
 
 ```
 
-**Step 6 : Multimodal Reference mapping PBMC**
+# Cell type identification
+
+**Step (a) : Multimodal Reference mapping PBMC**
 ```{r}
 anchors <- list()
 for (i in 1:length(pag.combined_batches)) {
@@ -136,14 +137,14 @@ for (i in 1:length(pag.combined_batches)) {
 }
 ```
 
-**Step 6(b) : Merging the Dataset and filtering out the cells with low prediction score**
+**Step (b) : Merging the Dataset and filtering out the cells with low prediction score**
 
 ```{r}
 Merged_Combined_Batch<- merge(pag.combined_batches[[1]], pag.combined_batches[2:length(pag.combined_batches)], merge.dr = "ref.umap")
 Data.filtered <- subset(Merged_Combined_Batch, subset = predicted.celltype.l1.score > 0.7)
 ```
 
-### Methods: sceQTL
+# sceQTL
 
 **Step: Linear Dominant Model**
 
