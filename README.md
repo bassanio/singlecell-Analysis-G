@@ -9,7 +9,9 @@ Singlecell Analysis
 
 [Step 4: Cell type identification](#Cell-type-identification)
 
-[Step 5: scRNA eQTL](#sceQTL)
+[Step 5: Aggregation of single-cell perl celltype to pseudobulk data](#Pseudo-bulk)
+
+[Step 6: scRNA eQTL](#sceQTL)
 
 [Software Requirments](#Software-requirments)
 
@@ -22,7 +24,7 @@ demuxlet --sam pool001/outs/possorted_genome_bam.bam \
 --vcf Filtered_2.Sorted.vcf.gz  --field GT \
 --group-list pool001/outs/filtered_feature_bc_matrix/barcodes.tsv.gz \
 --min-callrate 0.30 \
---out Pool2-GT
+--out Pool001-GT
 
 ```
 
@@ -110,6 +112,8 @@ Merged_Combined_Batch<- merge(pag.combined_batches[[1]], pag.combined_batches[2:
 Data.filtered <- subset(Merged_Combined_Batch, subset = predicted.celltype.l1.score > 0.7)
 ```
 
+# Pseudo bulk
+
 # sceQTL
 
 **Step: Linear Dominant Model**
@@ -137,3 +141,5 @@ plink --all-pheno --linear dominant interaction  --bfile AnalysisSamples  --no-s
 8: VCFtools : 0.1.14
 
 9: cellranger : 2.2.0
+
+10: Muscat :
