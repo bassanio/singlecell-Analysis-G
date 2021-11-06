@@ -60,7 +60,7 @@ pag.combined<- merge(Pool1.1, y=c(Pool2.1,Pool3.1,Pool4.1,Pool5.1,Pool6.1,Pool7.
 pag.combined<- subset(pag.combined, subset = nFeature_RNA > 200 & nFeature_RNA < 5200 & percent.mt < 10)
 ````
 
-# Data normalization of data by samples
+# Data normalization by samples
 
 ```{r}
 pag.combined_batches <- SplitObject(pag.combined, split.by = "PAGID")
