@@ -19,7 +19,7 @@
 
 **Step (a): Demuxlet** 
 
-Deconvoluation and Identification of sample identity of multuplexed singlecell run is done using program Demuxlet. The program uses the genotype information inf form of VCF  along with the bam output from cellranger to predict the likelihood to assign a barcode to a specific sample.
+Deconvoluation and Identification of sample identity of multiplexed singlecell run is done using program Demuxlet. The program uses the genotype information in form of VCF along with the bam output from cellranger to predict the likelihood to assign a barcode to a specific sample.
 ```
 demuxlet --sam pool001/outs/possorted_genome_bam.bam \
 --vcf Filtered_2.Sorted.vcf.gz  --field GT \
