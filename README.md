@@ -114,6 +114,37 @@ Data.filtered <- subset(Merged_Combined_Batch, subset = predicted.celltype.l1.sc
 
 # Pseudo bulk
 
+**Step (a) : Converting to SingleCellExperiment**
+```
+Idents(Merged_Combined_Batch) <- 'predicted.celltype.l1'
+GData.SE<-as.SingleCellExperiment(Merged_Combined_Batch)
+GData.SE$cluster_id <- GData.SE$predicted.celltype.l2
+GData.SE$sample_id <- GData.SE$PAGID
+GData.SE$group_id <- GData.SE$Visit
+GData.SE$id <-  GData.SE$PAGID
+(GData.SE <- prepSCE(GData.SE, kid = "cluster_id",gid = "group_id",  sid = "sample_id",drop = TRUE)) 
+
+nk <- length(kids <- levels(GData.SE$cluster_id))
+ns <- length(sids <- levels(GData.SE$sample_id))
+names(kids) <- kids; names(sids) <- sids
+assayNames(GData.SE)
+```
+
+**Step (b) : Per celltype mean aggregate**
+```
+pbCMean <-NULL
+pbCMean <- aggregateData(GData.SE, assay = "counts", fun = "mean",  by = c("cluster_id", "sample_id"))
+CellTypes<-assayNames(pbCMean)
+for(i in 1:length(CellTypes)) {# Head of for-loop
+  Fname<-NULL
+  ROutput<-NULL
+  Fname<-paste(CellTypes[i],"_aggregate_Count_mean.txt",sep="")
+  ROutput<-t((assay(pbCMean[],i)))
+  write.table(ROutput,file=Fname,sep = "\t",row.names = F)
+}
+
+```
+
 # sceQTL
 
 **Step: Linear Dominant Model**
@@ -142,4 +173,4 @@ plink --all-pheno --linear dominant interaction  --bfile AnalysisSamples  --no-s
 
 9: cellranger : 2.2.0
 
-10: Muscat :
+10: Muscat :1.2.1 
