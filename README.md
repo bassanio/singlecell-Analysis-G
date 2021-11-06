@@ -1,5 +1,4 @@
 # singlecell-analysis-G
-Singlecell Analysis
 
 [Step 1: Demultiplexing of Samples](#Identification-of-singlecells-based-on-the-genotype)
 
@@ -19,6 +18,8 @@ Singlecell Analysis
 # Identification of singlecells based on the genotype
 
 **Step (a): Demuxlet** 
+
+Deconvoluation and Identification of sample identity of multuplexed singlecell run is done using program Demuxlet. The program uses the genotype information inf form of VCF  along with the bam output from cellranger to predict the likelihood to assign a barcode to a specific sample.
 ```
 demuxlet --sam pool001/outs/possorted_genome_bam.bam \
 --vcf Filtered_2.Sorted.vcf.gz  --field GT \
@@ -28,9 +29,19 @@ demuxlet --sam pool001/outs/possorted_genome_bam.bam \
 
 ```
 
+The output from the above command produces a file called \[prefix\].best. The 6th column 'BEST' contains the barcodes likelihood to a given sample. Only those with a prefix tag 'SNG' is utilized for the downstream analysis.
+
+
 **Step (b): Subsetting** singlecells per sample and creating pool wise subset
 
+We created individual files containing the barcodes assigned for each of the samples. The list of the barcodes for each of the samples are provided along with the *GEOID*. 
+
 ```{r}
+library(Seurat)
+library(ggplot2)
+library(sctransform)
+library(dplyr)
+
 pool.data <-NULL;
 pool.data <- Read10X(data.dir ="pool01/outs/filtered_gene_bc_matrices/GRCh38/")
 pool<-NULL;
