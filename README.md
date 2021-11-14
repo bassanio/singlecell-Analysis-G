@@ -138,7 +138,7 @@ MyData_Subset<-subset(Merged_Combined_Batch, idents = c("PAG145_V3","PAG157_V1",
 
 ```
 
-**(ii)Calculation overall number of cells per Sample **
+**(ii)Calculation overall number of cells per Sample**
 ```
 CountTable<-table(MyData_Subset@meta.data$PAGID)
 write.table(CountTable,file="Filtered_CountTable_Per_Sample.txt",sep="\t")
