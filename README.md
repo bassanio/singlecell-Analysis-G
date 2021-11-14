@@ -138,13 +138,13 @@ MyData_Subset<-subset(Merged_Combined_Batch, idents = c("PAG145_V3","PAG157_V1",
 
 ```
 
-**(ii)Calculation overall number of cells per Sample**
+**(ii)Calculating overall number of cells per Sample**
 ```
 CountTable<-table(MyData_Subset@meta.data$PAGID)
 write.table(CountTable,file="Filtered_CountTable_Per_Sample.txt",sep="\t")
 ```
 
-**(iii)Calculation number of cells for each celltype per Sample**
+**(iii)Calculating number of cells for each celltype per Sample**
 ```
 Idents(MyData_Subset) <- 'predicted.celltype.l1'
 
@@ -162,7 +162,7 @@ P1melt$Visit<-as.factor(substr(P1melt$PAGID,8,9))
 ggplot(P1melt,aes(fill=Visit,y=Count,x=CellType))+geom_bar(position='dodge',stat='identity')+theme_bw()+scale_fill_manual(values=c("#009e73","#E69F00"))+theme(axis.text.x = element_text(angle = 90))   
 
 ```
-**(iv)Calculation cell proportion for each celltype per Sample**
+**(iv)Calculating cell proportion for each celltype per Sample**
 ```
 PropCountTable<-prop.table(table(MyData_Subset@meta.data$predicted.celltype.l1, MyData_Subset@meta.data$PAGID), margin = 2)
 write.table(PropCountTable,file="Filtered_proportion_Per_Sample_CellType_Predicted_Level1.txt",sep="\t")
