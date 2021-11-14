@@ -135,13 +135,13 @@ MyData_Subset<-subset(Merged_Combined_Batch, idents = c("PAG145_V3","PAG157_V1",
 
 ```
 
-**(ii)Cells  per Sample**
+**(ii)Calculation number of cells per Sample overall**
 ```
 CountTable<-table(MyData_Subset@meta.data$PAGID)
 write.table(CountTable,file="Filtered_CountTable_Per_Sample.txt",sep="\t")
 ```
 
-**(iii -a)Cell Type count per Sample**
+**(iii)Calculation number of cells for each celltype per Sample**
 ```
 Idents(MyData_Subset) <- 'predicted.celltype.l1'
 
@@ -158,6 +158,21 @@ P1melt$Individual<-as.factor(substr(P1melt$PAGID,1,6))
 P1melt$Visit<-as.factor(substr(P1melt$PAGID,8,9))
 ggplot(P1melt,aes(fill=Visit,y=Count,x=CellType))+geom_bar(position='dodge',stat='identity')+theme_bw()+scale_fill_manual(values=c("#009e73","#E69F00"))+theme(axis.text.x = element_text(angle = 90))   
 
+```
+**(iv)Calculation cell proportion for each celltype per Sample**
+```
+PropCountTable<-prop.table(table(MyData_Subset@meta.data$predicted.celltype.l1, MyData_Subset@meta.data$PAGID), margin = 2)
+write.table(PropCountTable,file="Filtered_proportion_Per_Sample_CellType_Predicted_Level1.txt",sep="\t")
+```
+**PCA plot with grouping based on Infection Status**
+
+```
+PropCountTable<-prop.table(table(MyData_Subset@meta.data$predicted.celltype.l1, MyData_Subset@meta.data$PAGID), margin = 2)
+PropCountTable1<-as.data.frame.matrix(t(PropCountTable))
+PropCountTable1$Visit<-as.factor(substr(rownames(PropCountTable1),8,9))
+PropCountTable1melt.pca<-prcomp(PropCountTable1[,c(1:8)], center = TRUE,scale. = TRUE)
+ggbiplot(PropCountTable1melt.pca, groups = PropCountTable1$Visit,ellipse=TRUE,varname.adjust=1,repel=TRUE)+xlim(-2.5,2.5)+scale_color_manual(values=c("#009e73","#E69F00"))+theme_bw()
+dev.off()
 ```
 
 # Pseudo bulk
