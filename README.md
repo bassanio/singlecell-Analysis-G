@@ -129,12 +129,13 @@ Data.filtered <- subset(Merged_Combined_Batch, subset = predicted.celltype.l1.sc
 ```
 
 # Cell Composition
+Downstream analysis was performed only on the cells identified with predictedscore of 0.7 and above 
 
 **(i)Removing Unmatched Samples** 
 
 ```
-Idents(Merged_Combined_Batch) <- 'PAGID'
-MyData_Subset<-subset(Merged_Combined_Batch, idents = c("PAG145_V3","PAG157_V1","PAG158_V1","PAG159_V1","PAG028_V1"), invert = TRUE)
+Idents(Data.filtered ) <- 'PAGID'
+MyData_Subset<-subset(Data.filtered , idents = c("PAG145_V3","PAG157_V1","PAG158_V1","PAG159_V1","PAG028_V1"), invert = TRUE)
 
 ```
 
@@ -182,8 +183,8 @@ dev.off()
 
 **Step (a) : Converting to SingleCellExperiment**
 ```
-Idents(Merged_Combined_Batch) <- 'predicted.celltype.l1'
-GData.SE<-as.SingleCellExperiment(Merged_Combined_Batch)
+Idents(Data.filtered ) <- 'predicted.celltype.l1'
+GData.SE<-as.SingleCellExperiment(Data.filtered)
 GData.SE$cluster_id <- GData.SE$predicted.celltype.l2
 GData.SE$sample_id <- GData.SE$PAGID
 GData.SE$group_id <- GData.SE$Visit
