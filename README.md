@@ -134,8 +134,8 @@ Downstream analysis was performed only on the cells identified with predictedsco
 **(i)Removing Unmatched Samples** 
 
 ```
-Idents(Data.filtered ) <- 'PAGID'
-MyData_Subset<-subset(Data.filtered , idents = c("PAG145_V3","PAG157_V1","PAG158_V1","PAG159_V1","PAG028_V1"), invert = TRUE)
+Idents(Data.filtered) <- 'PAGID'
+MyData_Subset<-subset(Data.filtered, idents = c("PAG145_V3","PAG157_V1","PAG158_V1","PAG159_V1","PAG028_V1"), invert = TRUE)
 
 ```
 
