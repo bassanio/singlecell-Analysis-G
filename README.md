@@ -8,9 +8,11 @@
 
 [Step 4: Cell type identification](#Cell-type-identification)
 
-[Step 5: Aggregation of single-cell perl celltype to pseudobulk data](#Pseudo-bulk)
+[Step 5: Cell Composition](#Cell-Composition)
 
-[Step 6: scRNA eQTL](#sceQTL)
+[Step 6: Aggregation of single-cell perl celltype to pseudobulk data](#Pseudo-bulk)
+
+[Step 7: scRNA eQTL](#sceQTL)
 
 [Software Requirments](#Software-requirments)
 
@@ -123,6 +125,41 @@ Merged_Combined_Batch<- merge(pag.combined_batches[[1]], pag.combined_batches[2:
 Data.filtered <- subset(Merged_Combined_Batch, subset = predicted.celltype.l1.score > 0.7)
 ```
 
+# Cell Composition
+
+**(i)Removing Samples** 
+
+```
+Idents(Merged_Combined_Batch) <- 'PAGID'
+MyData_Subset<-subset(Merged_Combined_Batch, idents = c("PAG145_V3","PAG157_V1","PAG158_V1","PAG159_V1","PAG028_V1"), invert = TRUE)
+
+```
+
+**(ii)Cells  per Sample**
+```
+CountTable<-table(MyData_Subset@meta.data$PAGID)
+write.table(CountTable,file="Filtered_CountTable_Per_Sample.txt",sep="\t")
+```
+
+**(iii -a)Cell Type count per Sample**
+```
+Idents(MyData_Subset) <- 'predicted.celltype.l1'
+
+## Predicted LeveL: 1
+CountTable<-table(MyData_Subset@meta.data$predicted.celltype.l1, MyData_Subset@meta.data$PAGID)
+write.table(CountTable,file="Filtered_CountTable_Per_Sample_CellType_Predicted_Level1.txt",sep="\t")
+```
+**Ploting**
+```
+CountTable<-t(CountTable)
+P1melt<-melt(CountTable)
+colnames(P1melt)<-c("PAGID","CellType","Count")
+P1melt$Individual<-as.factor(substr(P1melt$PAGID,1,6))
+P1melt$Visit<-as.factor(substr(P1melt$PAGID,8,9))
+ggplot(P1melt,aes(fill=Visit,y=Count,x=CellType))+geom_bar(position='dodge',stat='identity')+theme_bw()+scale_fill_manual(values=c("#009e73","#E69F00"))+theme(axis.text.x = element_text(angle = 90))   
+
+```
+
 # Pseudo bulk
 
 **Step (a) : Converting to SingleCellExperiment**
@@ -155,6 +192,8 @@ for(i in 1:length(CellTypes)) {# Head of for-loop
 }
 
 ```
+
+
 
 # sceQTL
 
